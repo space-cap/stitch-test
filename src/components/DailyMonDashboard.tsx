@@ -1,7 +1,12 @@
+"use client";
+
 import React, { useState } from 'react';
 import './DailyMonDashboard.css';
+import PetShop from './PetShop';
+import confetti from 'canvas-confetti';
 
 const DailyMonDashboard = () => {
+    const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'shop'
     const [coins, setCoins] = useState(350);
     const [quests, setQuests] = useState([
         { id: 1, title: "Morning Hydration", desc: "Drink 500ml of water", icon: "💧", colorClass: "bg-blue", completed: false },
@@ -9,7 +14,7 @@ const DailyMonDashboard = () => {
         { id: 3, title: "Mind & Soul", desc: "Read for 20 minutes", icon: "📚", colorClass: "bg-purple", completed: false },
     ]);
 
-    const toggleQuest = (id) => {
+    const toggleQuest = (id: number) => {
         setQuests(quests.map(q => {
             if (q.id === id) {
                 const isCompleting = !q.completed;
@@ -22,9 +27,26 @@ const DailyMonDashboard = () => {
     };
 
     const triggerConfetti = () => {
-        // Simple console log for demo, in real app install 'canvas-confetti'
-        console.log("🎉 Confetti Popup!");
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
     };
+
+    const handleBuyItem = (price: number) => {
+        setCoins(prev => prev - price);
+    };
+
+    if (currentView === 'shop') {
+        return (
+            <PetShop
+                onBack={() => setCurrentView('dashboard')}
+                currentCoins={coins}
+                onBuyItem={handleBuyItem}
+            />
+        );
+    }
 
     return (
         <div className="dailymon-container">
@@ -85,7 +107,7 @@ const DailyMonDashboard = () => {
                     <span className="nav-icon">⚔️</span>
                     Quests
                 </div>
-                <div className="nav-item">
+                <div className="nav-item" onClick={() => setCurrentView('shop')}>
                     <span className="nav-icon">🛍️</span>
                     Shop
                 </div>

@@ -51,3 +51,10 @@ Desktop.ini
 *.swp
 *.swo
 
+
+# Stitch & Agents
+.agents/
+.stitch/
+
+# Legacy
+dailymon-app/
